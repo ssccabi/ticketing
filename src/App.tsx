@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { Basket } from './modules/Basket';
+import { Payment } from './modules/Payment';
+import { Submit } from './modules/Submit';
+import { Tickets } from './modules/Tickets';
+import { Wizard } from './modules/Wizard';
+import { Sect } from './types/types';
 
 function App() {
+  const [currentStep, setCurrentStep] = useState(0)
+
+  function handleBack(index: number) {
+    setCurrentStep(index - 1)
+  }
+
+  function handleForward(index: number) {
+    setCurrentStep(index + 1)
+  }
+
+  const sects: Sect[] = [
+    {title: 'Jegyek', children: Tickets(), isAvailable: true},
+    {title: 'Kosár', children: Basket(), isAvailable: true},
+    {title: 'Fizetés', children: Payment(), isAvailable: true},
+    {title: 'Beküldés', children: Submit(), isAvailable: false}
+  ]
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wizard currentStep={currentStep} sects={sects} handleBack={handleBack} handleForward={handleForward} />
+    
   );
 }
 
